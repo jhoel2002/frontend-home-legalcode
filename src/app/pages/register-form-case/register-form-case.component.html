@@ -1,0 +1,111 @@
+<!-- wrapper principal -->
+<section class="max-w-4xl mx-auto my-11 bg-white rounded-xl shadow-2xl p-8 space-y-8">
+
+  <!-- Header bonito -->
+  <div class="text-center space-y-2 pb-4">
+    <div class="flex justify-center">
+      <div class="flex items-center space-x-2">
+        <img
+          src="https://flowbite.com/docs/images/logo.svg"
+          alt="Flowbite Logo"
+          class="h-8"
+        />
+        <span class="text-2xl font-semibold text-gray-900">Flowbite</span>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-800">Registrar nuevo caso</h2>
+    <p class="text-sm text-gray-500">
+      Completa el siguiente formulario para registrar un nuevo caso legal.
+    </p>
+  </div>
+
+  <!-- Formulario reactivo -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8">
+
+    <!-- GRID → 1 columna en móviles, 2 en lg -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- Columna IZQ -->
+      <div class="space-y-6">
+        <!-- Título -->
+        <div class="form-group">
+          <label for="title-case" class="block text-sm font-medium text-gray-700">Título:</label>
+          <input
+            type="text"
+            id="title-case"
+            formControlName="title"
+            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="title?.invalid && title?.touched" class="mt-1 text-xs text-red-600">
+            <div *ngIf="title?.errors?.['required']">El título es requerido.</div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="description-case" class="block text-sm font-medium text-gray-700">Descripción:</label>
+          <textarea
+            id="description-case"
+            rows="4"
+            formControlName="description"
+            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          ></textarea>
+          <div *ngIf="description?.invalid && description?.touched" class="text-red-600 text-xs">
+            <div *ngIf="description?.errors?.['required']">La descripción es requerida.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna DER -->
+      <div class="space-y-6">
+        <!-- Tipo de caso -->
+        <div class="form-group">
+          <label for="type_case" class="block text-sm font-medium text-gray-700">Tipo de caso:</label>
+          <select
+            id="type_case"
+            formControlName="type_case"
+            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option value="">Seleccione un tipo</option>
+            <option *ngFor="let type of caseTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div *ngIf="type_case?.invalid && type_case?.touched" class="text-red-600 text-xs">
+            <div *ngIf="type_case?.errors?.['required']">El tipo de caso es requerido.</div>
+          </div>
+        </div>
+
+        <!-- Evidencias -->
+        <div class="form-group">
+          <label class="block text-sm font-medium text-gray-700">Evidencias:</label>
+          <input
+            type="file"
+            multiple
+            (change)="onEvidencesSelected($event)"
+            class="mt-1 block w-full p-2 text-sm text-gray-600"
+          />
+          <div *ngIf="uploadError" class="text-red-600 text-xs">{{ uploadError }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-4 pt-4 ">
+      <button
+        type="button"
+        (click)="close()"
+        class="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-md"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
+</section>

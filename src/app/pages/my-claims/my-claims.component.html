@@ -1,0 +1,78 @@
+<section class="bg-gray-50 py-12">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800">
+            📂 Lista de solicitudes
+        </h2>
+        <p class="text-gray-600  mt-2">
+            Aquí puedes revisar los casos registrados y su estado actual.
+        </p>
+    </div>
+  <div class="container px-4 mx-auto">
+    <!-- Grid of cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        *ngFor="let request of pageable.content"
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+      >
+        <!-- Card Header -->
+        <div class="p-5 border-b dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-gray-500 dark:text-gray-400">{{ request.creation }}</span>
+            <span 
+              class="px-3 py-1 text-sm font-semibold rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800': request.status_request === 'APPROVED',
+                'bg-red-100 text-red-800': request.status_request === 'REJECTED',
+                'bg-yellow-100 text-yellow-800': request.status_request !== 'APPROVED' && request.status_request !== 'REJECTED'
+              }"
+            >   
+              {{ request.status_request }}
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
+            {{ request.title }}
+          </h3>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="p-5">
+          <p class="text-gray-600 dark:text-gray-300 mb-4">
+            {{ request.description | slice:0:150 }}...
+          </p>
+          
+          <!-- Card Footer -->
+          <div class="flex items-center justify-between mt-4">
+            <button
+              (click)="openClaimDetail(request)"
+              class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-300"
+            >
+              View Details
+            </button>
+            <!-- <div class="flex items-center space-x-2">
+              <img
+                [src]="request.avatar"
+                [alt]="request."
+                class="w-8 h-8 rounded-full object-cover"
+              />
+              <span class="font-medium text-gray-700 dark:text-gray-200">
+                {{ request.author }}
+              </span>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center mt-10">
+        <app-pagination
+        [totalPages]="pageable.totalPages"
+        [currentPage]="pageable.number"
+        (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+  <!-- Modal -->
+</section>
+
+<app-card
+    [request]="selectedCase"
+    [isOpen]="isModalOpen"
+    (closeModal)="closeModal()"></app-card>

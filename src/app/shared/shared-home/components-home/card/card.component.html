@@ -1,0 +1,87 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="close()"></div>
+  
+  <!-- Modal -->
+  <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl m-4 animate-modal-up">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b">
+      <h3 class="text-xl font-semibold text-gray-900">
+        {{ request.title }}
+      </h3>
+      <button 
+        (click)="close()"
+        class="text-gray-500 hover:text-gray-700 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Content -->
+    <div class="p-6 space-y-6">
+
+      <!-- Información del abogado y estado -->
+      <div class="flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div *ngIf="request.lawyerName" class="space-y-1">
+            <p class="text-sm text-gray-500">Abogado asignado:</p>
+            <p class="font-semibold text-gray-900">{{ request.lawyerName }}</p>
+          </div>
+          <p class="text-sm text-gray-500">{{ request.creation }}</p>
+        </div>
+        <span
+          class="px-3 py-1 text-sm font-semibold rounded-full h-fit"
+          [ngClass]="{
+            'bg-green-100 text-green-800': request.status_request === 'APPROVED',
+            'bg-red-100 text-red-800': request.status_request === 'REJECTED',
+            'bg-yellow-100 text-yellow-800': request.status_request !== 'APPROVED' && request.status_request !== 'REJECTED'
+          }"
+        >
+          {{ request.status_request }}
+        </span>
+      </div>
+
+      <!-- Información del caso -->
+      <div>
+        <h4 class="text-base font-semibold text-gray-900 mb-2">Tipo de caso</h4>
+        <p class="text-gray-600">{{ request.type_case }}</p>
+      </div>
+
+      <!-- Descripción del caso -->
+      <div>
+        <h4 class="text-base font-semibold text-gray-900 mb-2">Descripción del caso</h4>
+        <p class="text-gray-600">{{ request.description }}</p>
+      </div>
+
+      <!-- Archivos adjuntos -->
+      <div *ngIf="request?.evidencias?.length">
+        <h4 class="text-base font-semibold text-gray-900 text-center mb-4">Documentos Adjuntos</h4>
+        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+          <app-file-card
+            *ngFor="let document of request.evidencias"
+            [document]="document">
+          </app-file-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="flex items-center justify-end gap-2 p-4 border-t">
+      <button
+        *ngIf="request?.cotizacion"
+        (click)="downloadFileByCode(request.cotizacion)"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+        Descargar Cotización
+      </button>
+      <button
+        (click)="close()"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
