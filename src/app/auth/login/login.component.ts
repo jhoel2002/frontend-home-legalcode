@@ -42,17 +42,11 @@ export class LoginComponent {
     const credentials: AuthData = this.loginForm.value as AuthData;
 
     this.authService.login(credentials).subscribe({
-      next: (response) => {
-        const buffet = response.buffet;
+      next: () => {
         this.router.navigate([`/`]);
       },
       error: (error) => {
-        // Manejo detallado de errores
-        if (error.status === 401) {
-          this.errorMessage = 'Credenciales incorrectas. Inténtalo nuevamente.';
-        } else {
-          this.errorMessage = 'Error al iniciar sesión. Por favor, inténtalo más tarde.';
-        }
+        this.errorMessage = error;
       }
     });
   }

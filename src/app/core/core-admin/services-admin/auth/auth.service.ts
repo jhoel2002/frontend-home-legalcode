@@ -57,7 +57,6 @@ export class AuthService {
       const authoritiesArray = JSON.parse(payload.authorities) as { authority: string }[];
       role = authoritiesArray?.[0]?.authority || '';
       codeCustomer = payload.codeCustomer || '';
-      console.log('Cliente:', codeCustomer);
     } catch (error) {
       console.warn('No se pudo parsear authorities del token:', error);
     }
@@ -138,9 +137,9 @@ export class AuthService {
   // Manejo de errores
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Algo falló. Por favor intente nuevamente.';
-    if (error.status === 403 || error.status === 500) {
+    if (error.status === 403 || error.status === 401) {
       errorMessage = 'Credenciales incorrectas.';
     }
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => errorMessage);
   }
 }
